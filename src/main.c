@@ -10,10 +10,11 @@ int main(int argc, char* argv[]) {
     sim_init(&sim);
     
     if (load_program(&sim, argv[1]) != 0) {
+        printf("Error: Could not open file %s\n", argv[1]);
         return 1;
     }
     
-    run_simulation(&sim);
+    run_simulation(&sim, argv[1]);
     return 0;
 }
 
