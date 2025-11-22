@@ -181,10 +181,15 @@ void dump_registers(riscv_sim_t* sim) {
     }
     
     printf("\nBinary Register Dump:\n");
+    unsigned char regData[MEMORY_SIZE];
     for (int i = 0; i < NUM_REGISTERS; i++) {
         fwrite(&sim->registers[i], sizeof(int32_t), 1, stdout);
+        regData[i] = sim->registers[i];
     }
     printf("\n");
+
+    printf("\nCreating binary dump file");
+    printf("\n %d", regData[2]);
 }
 
 void run_simulation(riscv_sim_t* sim) {
