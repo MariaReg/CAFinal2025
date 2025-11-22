@@ -20,7 +20,7 @@ typedef struct {
 void sim_init(riscv_sim_t* sim);
 int load_program(riscv_sim_t* sim, const char* filename);
 void execute_instruction(riscv_sim_t* sim, uint32_t instruction);
-void dump_registers(riscv_sim_t* sim);
-void run_simulation(riscv_sim_t* sim);
+void dump_registers(riscv_sim_t* sim, const char* input_filename);
+void run_simulation(riscv_sim_t* sim, const char* input_filename);
 
 #endif
