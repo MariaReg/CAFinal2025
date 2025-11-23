@@ -4,7 +4,7 @@ void sim_init(riscv_sim_t* sim) {
     memset(sim, 0, sizeof(riscv_sim_t));
     sim->pc = PC_START;
     sim->running = 1;
-    //sim->registers[2] = MEMORY_SIZE; // sp = 1MB
+    sim->registers[2] = MEMORY_SIZE; // sp = 1MB
 }
 
 int load_program(riscv_sim_t* sim, const char* filename) {
@@ -200,3 +200,4 @@ void run_simulation(riscv_sim_t* sim, const char* input_filename) {
     }
     dump_registers(sim, input_filename);
 }
+
