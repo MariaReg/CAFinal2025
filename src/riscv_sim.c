@@ -4,7 +4,7 @@ void sim_init(riscv_sim_t* sim) {
     memset(sim, 0, sizeof(riscv_sim_t));
     sim->pc = PC_START;
     sim->running = 1;
-    sim->registers[2] = MEMORY_SIZE; // sp = 1MB
+    //sim->registers[2] = MEMORY_SIZE; // sp = 1MB
 }
 
 int load_program(riscv_sim_t* sim, const char* filename) {
@@ -174,32 +174,29 @@ void execute_instruction(riscv_sim_t* sim, uint32_t instruction) {
     }
 }
 
-void dump_registers(riscv_sim_t* sim) {
-    printf("Register Dump:\n");
+void dump_registers(riscv_sim_t* sim, const char* input_filename) {
+     printf("Register content at program end:\n");
     for (int i = 0; i < NUM_REGISTERS; i++) {
         printf("x%-2d: 0x%08X (%d)\n", i, sim->registers[i], sim->registers[i]);
     }
     
-    printf("\nBinary Register Dump:\n");
-    int regData[sizeof(sim->registers)];
-    for (int i = 0; i < NUM_REGISTERS; i++) {
-        fwrite(&sim->registers[i], sizeof(int32_t), 1, stdout);
-        regData[i] = sim->registers[i];
-        // printf("\n %d", regData[i]);
+    char output_filename[256];
+    snprintf(output_filename, sizeof(output_filename), "%s.regdump.bin", input_filename);
+    
+    FILE* bin_file = fopen(output_filename, "wb");
+    if (bin_file) {
+        for (int i = 0; i < NUM_REGISTERS; i++) {
+            fwrite(&sim->registers[i], sizeof(int32_t), 1, bin_file);
+        }
+        fclose(bin_file);
     }
-    printf("\n");
-
-    printf("\nCreating binary dump file");
-    FILE *ptr;
-    ptr = fopen("binDump.bin","wb");
-    fread(regData, sizeof(regData), 1, ptr);
 }
 
-void run_simulation(riscv_sim_t* sim) {
+void run_simulation(riscv_sim_t* sim, const char* input_filename) {
     while (sim->running) {
         uint32_t instruction = fetch_instruction(sim);
         if (!sim->running) break;
         execute_instruction(sim, instruction);
     }
-    dump_registers(sim);
+    dump_registers(sim, input_filename);
 }
